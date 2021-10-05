@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Repositories\UserRepository as RepositoriesUserRepository;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Appp\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -17,14 +18,14 @@ class UserController extends Controller
 
     protected $user=null;
 
-    public function __construct(User $user)
+    public function __construct(RepositoriesUserRepository $user)
     {
         $this->user=$user;
     }
     public function index()
     {
-        $users=$this->user->all();
-        return view('user.index')->with('users',$users);
+        $users = $this->user->all();
+        return view('user.index')->with('users', $users);
     }
 
     /**
@@ -45,14 +46,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data=$request->all();
+        $data = $request->all();
         // dd($data);
-        $data['password']=Hash::make($data['password']);
-        $this->user->fill($data);
-        $success=$this->user->save();
-        if($success){
+        $data['password'] = Hash::make($data['password']);
+        $success = $this->user->store($data);
+        if ($success)
+        {
             return redirect()->route('user.index');
-            dd("User Data Saved Successfully");
         }
 
     }
@@ -76,8 +76,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user=$this->user->find($id);
-        return view('user.form')->with('user',$user);
+        $user = $this->user->get($id);
+        return view('user.form')->with('user', $user);
     }
 
     /**
@@ -89,12 +89,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user=$this->user->find($id);
-        $data=$request->all();
-        // ,dd($data);
+        $user = $this->user->get($id);
+        $data = $request->all();
         $user->fill($data);
         $success=$user->save();
-        if($success){
+        if ($success)
+        {
             return redirect()->route('user.index');
         }
     }
@@ -107,9 +107,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user=$this->user->find($id);
-        $success=$user->delete();
-        if($success){
+        $user = $this->user->get($id);
+        $success = $user->delete();
+        if($success)
+        {
             return redirect()->route('user.index');
         }
     }

@@ -19,7 +19,6 @@
                         <th>Sno</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Password</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -29,7 +28,6 @@
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->password }}</td>
                                     <td>
                                         <a href="{{ route('user.edit',$user->id) }}" class="btn btn-success">Edit</a>
                                         <form action="{{ route('user.destroy',$user->id) }}" onclick="return confirm('Are You Sure To Delete This User ?')" method="POST">

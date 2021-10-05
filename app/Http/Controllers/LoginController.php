@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Repositories\UserRepository;
 
 class LoginController extends Controller
 {
     protected $user=null;
-     public function __construct(User $user)
+     public function __construct(UserRepository $user)
      {
          $this->user=$user;
      }
+     
     public function authenticate(Request $request)
     {
        dd("Hello");
@@ -36,13 +37,13 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request)
-{
-    Auth::logout();
+    {
+        Auth::logout();
 
-    $request->session()->invalidate();
+        $request->session()->invalidate();
 
-    $request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
-    return redirect('/');
-}
+        return redirect('/');
+    }
 }
